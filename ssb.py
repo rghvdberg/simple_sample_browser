@@ -26,10 +26,10 @@ class Ui_MainWindow(object):
         #
         
         model_dir = QFileSystemModel()
-        self.model = model_dir
+        self.dirmodel = model_dir
         #print (self.model_dir)
-        model_dir.setRootPath('/home/rob/Muziek')
-        root_dir = model_dir.setRootPath('/home/rob/Muziek')
+        model_dir.setRootPath('/')
+        root_dir = model_dir.setRootPath('/')
         # only directories
         model_dir.setFilter(QtCore.QDir.AllDirs|QtCore.QDir.NoDotAndDotDot)
         
@@ -45,8 +45,9 @@ class Ui_MainWindow(object):
         #
         
         model_files = QFileSystemModel()
-        model_files.setRootPath('/home/rob/Muziek')
-        root_files = model_files.setRootPath('/home/rob/Muziek')
+        model_files.setRootPath('/')
+        root_files = model_files.setRootPath('/')
+        self.filemodel  = model_files
         # only files     
         model_files.setFilter(QtCore.QDir.Files|QtCore.QDir.NoDotAndDotDot)
         self.treeView_files = QtWidgets.QTreeView(self.centralwidget)
@@ -101,8 +102,10 @@ class Ui_MainWindow(object):
         
     def test_dir(self, signal):
         #print(self,signal)
-        file_path=self.model.filePath(signal)
+        file_path=self.dirmodel.filePath(signal)
         print(file_path)
+        my_root = self.filemodel.setRootPath(file_path)
+        self.treeView_files.setRootIndex(my_root)
 
 
 if __name__ == "__main__":
