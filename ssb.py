@@ -26,6 +26,7 @@ class Ui_MainWindow(object):
         #
         
         model_dir = QFileSystemModel()
+        self.model = model_dir
         #print (self.model_dir)
         model_dir.setRootPath('/home/rob/Muziek')
         root_dir = model_dir.setRootPath('/home/rob/Muziek')
@@ -99,8 +100,8 @@ class Ui_MainWindow(object):
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         
     def test_dir(self, signal):
-        print(self,signal)
-        file_path=self.model_dir().filePath(signal)
+        #print(self,signal)
+        file_path=self.model.filePath(signal)
         print(file_path)
 
 
