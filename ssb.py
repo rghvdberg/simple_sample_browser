@@ -37,9 +37,20 @@ class Ui_MainWindow(object):
         self.treeView_dir.setObjectName("treeView_dir")
         self.treeView_dir.setModel(model_dir)
         self.treeView_dir.setRootIndex(root_dir)
+        self.treeView_dir.setSortingEnabled(True)
+        self.treeView_dir.hideColumn(1)
+        self.treeView_dir.hideColumn(2)
+
+        self.treeView_dir.resizeColumnToContents(0)
+        self.treeView_dir.resizeColumnToContents(1)
+        self.treeView_dir.resizeColumnToContents(2)
+        self.treeView_dir.resizeColumnToContents(3)
+
         self.horizontalLayout.addWidget(self.treeView_dir)
+
         self.treeView_dir.clicked.connect(self.test_dir)
-        
+
+
         #
         # File Section
         #
@@ -66,8 +77,10 @@ class Ui_MainWindow(object):
         self.graphicsView.setSizePolicy(sizePolicy)
         self.graphicsView.setBaseSize(QtCore.QSize(0, 0))
         self.graphicsView.setObjectName("graphicsView")
+
         self.verticalLayout.addWidget(self.graphicsView)
         self.horizontalLayout_2.addLayout(self.verticalLayout)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
@@ -75,16 +88,21 @@ class Ui_MainWindow(object):
         self.menuPreferences = QtWidgets.QMenu(self.menubar)
         self.menuPreferences.setObjectName("menuPreferences")
         MainWindow.setMenuBar(self.menubar)
+
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
+
         MainWindow.setStatusBar(self.statusbar)
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
+
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
+
         self.actionPreferences = QtWidgets.QAction(MainWindow)
         self.actionPreferences.setObjectName("actionPreferences")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
+
         self.menuPreferences.addAction(self.actionPreferences)
         self.menuPreferences.addAction(self.actionExit)
         self.menubar.addAction(self.menuPreferences.menuAction())
@@ -102,10 +120,16 @@ class Ui_MainWindow(object):
         
     def test_dir(self, signal):
         #print(self,signal)
+        self.treeView_dir.resizeColumnToContents(0)
+        self.treeView_files.resizeColumnToContents(0)
+        #self.treeView_dir.resizeColumnToContents(1)
+        #self.treeView_dir.resizeColumnToContents(2)
+        #self.treeView_dir.resizeColumnToContents(3)
         file_path=self.dirmodel.filePath(signal)
         print(file_path)
         my_root = self.filemodel.setRootPath(file_path)
         self.treeView_files.setRootIndex(my_root)
+
 
 
 if __name__ == "__main__":
