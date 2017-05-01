@@ -30,16 +30,17 @@ class Ui_MainWindow(object):
         model_dir = QFileSystemModel()
         self.dirmodel = model_dir
         #print (self.model_dir)
-        model_dir.setRootPath('/home/rob/Muziek')
-        root_dir = model_dir.setRootPath('/home/rob/Muziek')
+        model_dir.setRootPath(homedir)
+        root_dir = model_dir.setRootPath(homedir)
         # only directories
-        model_dir.setFilter(QtCore.QDir.AllDirs|QtCore.QDir.NoDotAndDotDot)
+        model_dir.setFilter(QtCore.QDir.AllDirs|QtCore.QDir.NoDot)
 
         self.treeView_dir = QtWidgets.QTreeView(self.centralwidget)
         self.treeView_dir.setObjectName("treeView_dir")
         self.treeView_dir.setModel(model_dir)
         self.treeView_dir.setRootIndex(root_dir)
         self.treeView_dir.setSortingEnabled(True)
+        self.treeView_dir.sortByColumn(0,0)
         self.treeView_dir.hideColumn(1)
         self.treeView_dir.hideColumn(2)
 
@@ -59,8 +60,8 @@ class Ui_MainWindow(object):
         audio_extensions = tuple(self.audio_mimetype())
         # print (audio_extensions)
         model_files = QFileSystemModel()
-        model_files.setRootPath('/home/rob/Muziek')
-        root_files = model_files.setRootPath('/home/rob/Muziek')
+        model_files.setRootPath(homedir)
+        root_files = model_files.setRootPath(homedir)
         self.filemodel = model_files
         # only files
         model_files.setFilter(QtCore.QDir.Files|QtCore.QDir.NoDotAndDotDot)
@@ -70,6 +71,9 @@ class Ui_MainWindow(object):
         self.treeView_files.setObjectName("treeView_files")
         self.treeView_files.setModel(model_files)
         self.treeView_files.setRootIndex(root_files)
+        self.treeView_files.setSortingEnabled(True)
+        self.treeView_files.sortByColumn(0, 0)
+
         self.treeView_files.selectionModel().selectionChanged.connect(self.play_audio)
         self.horizontalLayout.addWidget(self.treeView_files)
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -156,8 +160,11 @@ class Ui_MainWindow(object):
         self.player.play()
 
 if __name__ == "__main__":
-    import sys
-    import mimetypes
+    import sys, mimetypes,os
+
+    homedir=os.path.expanduser('~')
+    print(homedir)
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
