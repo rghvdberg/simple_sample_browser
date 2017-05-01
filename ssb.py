@@ -151,10 +151,9 @@ class Ui_MainWindow(object):
         print(url)
         content= QtMultimedia.QMediaContent(url)
 
-        player = QtMultimedia.QMediaPlayer()
-
-        player.setMedia(content)
-        player.play()
+        self.player = QtMultimedia.QMediaPlayer()
+        self.player.setMedia(content)
+        self.player.play()
 
 if __name__ == "__main__":
     import sys
