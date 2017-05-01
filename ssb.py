@@ -6,9 +6,9 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, QtMultimedia
 from PyQt5.QtWidgets import QTreeView,QFileSystemModel,QApplication
-import mimetypes
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -22,19 +22,19 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        
+
         #
         # Directories
         #
-        
+
         model_dir = QFileSystemModel()
         self.dirmodel = model_dir
         #print (self.model_dir)
-        model_dir.setRootPath('/')
-        root_dir = model_dir.setRootPath('/')
+        model_dir.setRootPath('/home/rob/Muziek')
+        root_dir = model_dir.setRootPath('/home/rob/Muziek')
         # only directories
         model_dir.setFilter(QtCore.QDir.AllDirs|QtCore.QDir.NoDotAndDotDot)
-        
+
         self.treeView_dir = QtWidgets.QTreeView(self.centralwidget)
         self.treeView_dir.setObjectName("treeView_dir")
         self.treeView_dir.setModel(model_dir)
@@ -57,12 +57,12 @@ class Ui_MainWindow(object):
         # File Section
         #
         audio_extensions = tuple(self.audio_mimetype())
-        print (audio_extensions)
+        # print (audio_extensions)
         model_files = QFileSystemModel()
-        model_files.setRootPath('/')
-        root_files = model_files.setRootPath('/')
+        model_files.setRootPath('/home/rob/Muziek')
+        root_files = model_files.setRootPath('/home/rob/Muziek')
         self.filemodel = model_files
-        # only files     
+        # only files
         model_files.setFilter(QtCore.QDir.Files|QtCore.QDir.NoDotAndDotDot)
         model_files.setNameFilters(audio_extensions)
 
@@ -73,8 +73,8 @@ class Ui_MainWindow(object):
         self.treeView_files.selectionModel().selectionChanged.connect(self.play_audio)
         self.horizontalLayout.addWidget(self.treeView_files)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        
-        
+
+
         self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -123,9 +123,9 @@ class Ui_MainWindow(object):
         self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionPreferences.setText(_translate("MainWindow", "Preferences"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-        
+
     def test_dir(self, signal):
-        #print(self,signal)
+        # print(self,signal)
         self.treeView_dir.resizeColumnToContents(0)
         self.treeView_files.resizeColumnToContents(0)
         #self.treeView_dir.resizeColumnToContents(1)
@@ -144,7 +144,17 @@ class Ui_MainWindow(object):
 
     def play_audio(self, selected_indexes, deselected_indexes):
         selected_paths = tuple(self.filemodel.filePath(index) for index in self.treeView_files.selectionModel().selectedRows())
-        print('\n'.join(selected_paths))
+
+        audio_file_path = '\n'.join(selected_paths)
+        print(audio_file_path)
+        url= QtCore.QUrl.fromLocalFile(audio_file_path)
+        print(url)
+        content= QtMultimedia.QMediaContent(url)
+
+        player = QtMultimedia.QMediaPlayer()
+
+        player.setMedia(content)
+        player.play()
 
 if __name__ == "__main__":
     import sys
@@ -155,4 +165,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-
