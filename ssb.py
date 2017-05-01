@@ -61,7 +61,7 @@ class Ui_MainWindow(object):
         model_files = QFileSystemModel()
         model_files.setRootPath('/')
         root_files = model_files.setRootPath('/')
-        self.filemodel  = model_files
+        self.filemodel = model_files
         # only files     
         model_files.setFilter(QtCore.QDir.Files|QtCore.QDir.NoDotAndDotDot)
         model_files.setNameFilters(audio_extensions)
@@ -132,7 +132,7 @@ class Ui_MainWindow(object):
         #self.treeView_dir.resizeColumnToContents(2)
         #self.treeView_dir.resizeColumnToContents(3)
         file_path=self.dirmodel.filePath(signal)
-        print(file_path)
+        #print(file_path)
         my_root = self.filemodel.setRootPath(file_path)
         self.treeView_files.setRootIndex(my_root)
 
@@ -143,7 +143,7 @@ class Ui_MainWindow(object):
                 yield "*"+ext
 
     def play_audio(self, selected_indexes, deselected_indexes):
-        selected_paths = tuple(self.model_files().filePath(index) for index in self.treeView_files.selectionModel().selectedRows())
+        selected_paths = tuple(self.filemodel.filePath(index) for index in self.treeView_files.selectionModel().selectedRows())
         print('\n'.join(selected_paths))
 
 if __name__ == "__main__":
