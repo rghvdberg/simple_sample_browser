@@ -56,13 +56,16 @@ class Ui_MainWindow(object):
         #
         # File Section
         #
-        
+        audio_extensions = tuple(self.audio_mimetype())
+        print (audio_extensions)
         model_files = QFileSystemModel()
         model_files.setRootPath('/')
         root_files = model_files.setRootPath('/')
         self.filemodel  = model_files
         # only files     
         model_files.setFilter(QtCore.QDir.Files|QtCore.QDir.NoDotAndDotDot)
+        model_files.setNameFilters(audio_extensions)
+
         self.treeView_files = QtWidgets.QTreeView(self.centralwidget)
         self.treeView_files.setObjectName("treeView_files")
         self.treeView_files.setModel(model_files)
@@ -132,10 +135,17 @@ class Ui_MainWindow(object):
         my_root = self.filemodel.setRootPath(file_path)
         self.treeView_files.setRootIndex(my_root)
 
+    def audio_mimetype(self):
+        mimetypes.init()
+        for ext in mimetypes.types_map:
+            if mimetypes.types_map[ext].split('/')[0] == 'audio':
+                yield "*"+ext
+
 
 
 if __name__ == "__main__":
     import sys
+    import mimetypes
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
