@@ -70,6 +70,7 @@ class Ui_MainWindow(object):
         self.treeView_files.setObjectName("treeView_files")
         self.treeView_files.setModel(model_files)
         self.treeView_files.setRootIndex(root_files)
+        self.treeView_files.selectionModel().selectionChanged.connect(self.play_audio)
         self.horizontalLayout.addWidget(self.treeView_files)
         self.verticalLayout.addLayout(self.horizontalLayout)
         
@@ -141,7 +142,9 @@ class Ui_MainWindow(object):
             if mimetypes.types_map[ext].split('/')[0] == 'audio':
                 yield "*"+ext
 
-
+    def play_audio(self, selected_indexes, deselected_indexes):
+        selected_paths = tuple(self.model_files().filePath(index) for index in self.treeView_files.selectionModel().selectedRows())
+        print('\n'.join(selected_paths))
 
 if __name__ == "__main__":
     import sys
